@@ -42,13 +42,13 @@ workflows:
       # 1. Зависимости
       - name: Flutter pub get
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter pub get
 
       # 2. Анализ кода
       - name: Flutter analyze
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter analyze --no-fatal-infos
 
       # 3. Сборка APK
@@ -56,7 +56,7 @@ workflows:
       #    использует debug signingConfig (fallback прописан в gradle)
       - name: Build APK (test)
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter build apk \
             --release \
             --build-name=0.0.$BUILD_NUMBER \
@@ -102,26 +102,26 @@ workflows:
       # 1. Зависимости Flutter
       - name: Flutter pub get
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter pub get
 
       # 2. CocoaPods
       - name: Pod install
         script: |
-          cd thermometer/ios
+          cd thermometer-ble/ios
           pod install
 
       # 3. Анализ кода
       - name: Flutter analyze
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter analyze --no-fatal-infos
 
       # 4. Сборка неподписанного IPA
       #    --no-codesign: пропускает подписание (Apple аккаунт не нужен)
       - name: Build IPA (unsigned)
         script: |
-          cd thermometer
+          cd thermometer-ble
           flutter build ios \
             --release \
             --no-codesign \
