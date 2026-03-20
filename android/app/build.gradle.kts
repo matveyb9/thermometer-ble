@@ -71,6 +71,7 @@ android {
 
             // Минификация кода (ProGuard / R8)
             isMinifyEnabled = false
+	    isShrinkResources = false
         }
         debug {
             isDebuggable = true
