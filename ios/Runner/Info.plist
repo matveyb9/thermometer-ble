@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+  <!-- ═══════════════════════════════════════════════════════
+       BLE разрешения — ОБЯЗАТЕЛЬНО для работы на iOS 13+
+       Без этих строк App Store отклонит приложение,
+       а на устройстве CoreBluetooth вернёт ошибку.
+       Текст показывается пользователю в системном диалоге.
+  ════════════════════════════════════════════════════════ -->
+
+  <!-- Запрос разрешения на использование Bluetooth -->
+  <key>NSBluetoothAlwaysUsageDescription</key>
+  <string>Приложению нужен Bluetooth для подключения к термометру ESP32 и получения данных о температуре.</string>
+
+  <!-- Для iOS 12 и ниже (оставляем для совместимости) -->
+  <key>NSBluetoothPeripheralUsageDescription</key>
+  <string>Приложению нужен Bluetooth для подключения к термометру ESP32.</string>
+
+  <!-- ═══════════════════════════════════════════════════════
+       Стандартные ключи Flutter — не удалять
+  ════════════════════════════════════════════════════════ -->
+
+  <key>CFBundleDevelopmentRegion</key>
+  <string>$(DEVELOPMENT_LANGUAGE)</string>
+
+  <key>CFBundleDisplayName</key>
+  <string>Термометр</string>
+
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+
+  <key>CFBundleIdentifier</key>
+  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+
+  <key>CFBundleName</key>
+  <string>thermometer</string>
+
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>$(FLUTTER_BUILD_NAME)</string>
+
+  <key>CFBundleSignature</key>
+  <string>????</string>
+
+  <key>CFBundleVersion</key>
+  <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+  <key>LSRequiresIPhoneOS</key>
+  <true/>
+
+  <!-- Минимальная версия iOS — flutter_blue_plus требует iOS 13+ -->
+  <key>MinimumOSVersion</key>
+  <string>13.0</string>
+
+  <key>UILaunchStoryboardName</key>
+  <string>LaunchScreen</string>
+
+  <key>UIMainStoryboardFile</key>
+  <string>Main</string>
+
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+
+  <key>UISupportedInterfaceOrientations~ipad</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+
+  <key>UIViewControllerBasedStatusBarAppearance</key>
+  <false/>
+
+  <!-- Тёмный режим — следуем системной теме -->
+  <key>UIUserInterfaceStyle</key>
+  <string>Automatic</string>
+
+</dict>
+</plist>

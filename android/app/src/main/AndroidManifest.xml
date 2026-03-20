@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    ═══════════════════════════════════════════════════════════
+     BLE разрешения
+     Разделены по версиям Android — запрашиваем только нужное
+    ═══════════════════════════════════════════════════════════
+
+     Android 12+ (API 31+): новые разрешения BLUETOOTH_SCAN и BLUETOOTH_CONNECT
+     Android 11  (API 30) и ниже: старые BLUETOOTH + ACCESS_FINE_LOCATION
+    -->
+
+    <!-- Android 12+ (API 31+): сканирование BLE-устройств -->
+    <!-- neverForLocation — не используем BLE для определения геолокации,
+         это убирает требование запрашивать разрешение на геолокацию на API 31+ -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        android:minSdkVersion="31" />
+
+    <!-- Android 12+ (API 31+): подключение к BLE-устройствам -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_CONNECT"
+        android:minSdkVersion="31" />
+
+    <!-- Android 11 и ниже (API 21–30): классическое BLE -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+
+    <!-- Android 11 и ниже: геолокация нужна для сканирования BLE -->
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- Объявляем что приложение требует наличия BLE на устройстве -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <application
+        android:label="Thermometer"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+
+            <!-- Splash screen на время загрузки Flutter -->
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Не удалять: нужен для корректной работы плагинов Flutter -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+
+</manifest>

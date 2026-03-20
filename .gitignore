@@ -1,0 +1,178 @@
+# ══════════════════════════════════════════════════════════════
+#  .gitignore для Flutter-проекта
+#  Dart-пакет:      thermometer
+#  Android appId:   ru.matveyb9.diy.thermometer
+#  iOS bundleId:    ru.matveyb9.diy.thermometer
+# ══════════════════════════════════════════════════════════════
+
+# ─── Секреты и конфиденциальные данные ──────────────────────
+# ⚠️  Главное — никогда не коммитить ключи и сертификаты
+
+# Файлы окружения с ключами
+.env
+.env.*
+*.env
+!*.env.example          # шаблон .env — коммитить МОЖНО (без реальных значений)
+
+# Dart-файл с секретами (если хранишь ключи в Dart)
+lib/secrets.dart
+lib/config/secrets.dart
+
+# Android: ключи подписи APK/AAB
+*.keystore
+*.jks
+key.properties          # содержит пути и пароли к keystore
+
+# PKCS12 — хранилища ключей и сертификатов
+*.p12                   # включает android/app/keystore.p12
+*.pfx
+
+# Dart-define — файлы с переменными сборки (--dart-define-from-file)
+# Обычно содержат API-ключи, URLs, флаги окружения
+*.json.define
+dart-defines.json
+dart_defines.json
+define/
+dart-define/
+!dart-define.example.json  # шаблон с пустыми значениями — коммитить МОЖНО
+
+# Google Services (Firebase и пр.)
+google-services.json
+GoogleService-Info.plist
+
+# ─── Flutter / Dart ──────────────────────────────────────────
+
+# Инструментальные файлы Flutter (генерируются автоматически)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Кэш pub
+.pub-cache/
+.pub/
+
+# Сгенерированный код (build_runner)
+*.g.dart
+*.freezed.dart
+*.gr.dart
+# Раскомментируй строку ниже, если НЕ используешь build_runner:
+# *.g.dart
+
+# Старый файл зависимостей
+.packages
+
+# Артефакты сборки
+build/
+
+# Coverage
+coverage/
+
+# pubspec.lock — КОММИТИТЬ (фиксирует версии зависимостей, воспроизводимые сборки)
+# Podfile.lock  — КОММИТИТЬ (то же для iOS CocoaPods зависимостей)
+# Эти файлы намеренно НЕ в .gitignore
+
+# ─── Android ─────────────────────────────────────────────────
+
+# Gradle кэш и сборка
+.gradle/
+android/.gradle/
+android/app/build/
+android/build/
+android/captures/
+android/local.properties  # содержит локальные пути SDK — у каждого свои
+
+# NDK
+android/.cxx/
+
+# Отчёты lint
+android/app/lint-results*.xml
+android/app/lint-results*.html
+
+# ─── iOS ─────────────────────────────────────────────────────
+
+# Provisioning profiles — никогда не коммитить
+*.mobileprovision
+*.cer
+
+# Xcode DerivedData
+ios/DerivedData/
+**/DerivedData/
+
+# CocoaPods
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/ServiceDefinitions.json
+
+# Xcode
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/
+ios/Runner.xcworkspace/xcshareddata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcbkptlist
+build/
+
+# ─── IDE ─────────────────────────────────────────────────────
+
+# VS Code
+.vscode/
+!.vscode/extensions.json   # список рекомендуемых расширений — коммитить МОЖНО
+!.vscode/launch.json       # конфиг запуска — коммитить МОЖНО (без секретов)
+!.vscode/settings.json     # настройки проекта — коммитить МОЖНО
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+
+# ─── Операционные системы ────────────────────────────────────
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ─── Логи ────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ─── Прочее ──────────────────────────────────────────────────
+
+# Временные файлы
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Архивы (случайно не закоммитить большой файл)
+*.zip
+*.tar.gz
+*.rar
+
+# Файлы символьных ссылок Flutter web
+lib/generated_plugin_registrant.dart

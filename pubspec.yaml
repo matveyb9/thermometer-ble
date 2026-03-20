@@ -1,0 +1,53 @@
+name: thermometer
+description: BLE термометр на основе ESP32 + DS18B20.
+version: 1.0.0+1
+
+publish_to: 'none'
+
+# Flutter 3.41.2 stable / Dart 3.11
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+# ─── Зависимости ─────────────────────────────────────────────
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # BLE — сканирование, подключение, чтение характеристик
+  flutter_blue_plus: ^2.1.0
+
+  # Управление состоянием
+  provider: ^6.1.5
+
+  # Сохранение выбранной единицы между сеансами
+  shared_preferences: ^2.3.0
+
+  # Запрос разрешений BLE в runtime (Android 12+ / iOS 13+)
+  permission_handler: ^12.0.1
+
+  # График температуры (LineChart)
+  fl_chart: ^0.71.0
+
+  # Экспорт CSV через системный диалог «Поделиться»
+  share_plus: ^11.0.0
+
+  # Временный каталог для записи CSV-файла перед шарингом
+  path_provider: ^2.3.0
+
+# ─── Dev-зависимости ─────────────────────────────────────────
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+  # Генерация иконок приложения из одного PNG
+  # Запуск: dart run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.4
+
+# ─── Flutter ─────────────────────────────────────────────────
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icon/           # иконка для flutter_launcher_icons

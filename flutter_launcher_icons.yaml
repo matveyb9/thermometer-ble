@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────
+#  flutter_launcher_icons.yaml
+#  Конфигурация генератора иконок приложения
+#
+#  После распаковки архива выполни:
+#    dart run flutter_launcher_icons
+#
+#  Это сгенерирует все нужные размеры иконок для Android и iOS
+#  в папках android/app/src/main/res/ и ios/Runner/Assets.xcassets/
+# ─────────────────────────────────────────────────────────────
+
+flutter_launcher_icons:
+
+  # ── Android ────────────────────────────────────────────────
+  android: true
+  # Адаптивная иконка (Android 8+):
+  #   foreground — сам рисунок (обрезается по кругу/квадрату)
+  #   background — цвет или картинка за ним
+  adaptive_icon_foreground: assets/icon/app_icon.png
+  adaptive_icon_background: '#121826'
+
+  # ── iOS ────────────────────────────────────────────────────
+  ios: true
+  image_path_ios: assets/icon/app_icon.png
+  # iOS не поддерживает прозрачность в иконках — фон уже встроен в PNG
+
+  # ── Общее ──────────────────────────────────────────────────
+  image_path: assets/icon/app_icon.png
+
+  # Минимальная версия Android SDK (должна совпадать с build.gradle)
+  min_sdk_android: 21
