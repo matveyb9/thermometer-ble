@@ -66,5 +66,5 @@ final class TemperatureValue extends TemperatureReading {
 
 /// Ошибка датчика (ESP32 прислал "ERR")
 final class TemperatureSensorError extends TemperatureReading {
-  const TemperatureSensorError();
+  TemperatureSensorError();
 }

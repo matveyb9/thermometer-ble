@@ -94,6 +94,7 @@ class BleService {
 
     try {
       await device.connect(
+	license:     FbpConnectLicense.personal,
         autoConnect: false,
         timeout:     _kConnectTimeout,
       );
