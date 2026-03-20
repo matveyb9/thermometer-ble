@@ -1,37 +1,33 @@
 # ══════════════════════════════════════════════════════════════
-#  codemagic.yaml — автосборка Thermometer BLE
+#  codemagic.yaml — ТЕСТОВАЯ сборка Thermometer BLE
 #
 #  Два воркфлоу:
-#    android-release  →  подписанный APK + AAB
-#    ios-release      →  подписанный IPA
+#    android-test  →  APK подписан debug-ключом (без секретов)
+#    ios-test      →  неподписанный IPA (без Apple Developer аккаунта)
 #
-#  Триггер: push в ветку main
-#  Артефакты: скачиваются со страницы сборки в Codemagic
+#  Триггер: push в ветку develop
+#            (main оставлен для релизной сборки)
 #
-#  Необходимые секреты (Settings → Environment variables):
-#    Android:
-#      CM_KEYSTORE          — PKCS12 (.p12) keystore base64 (см. инструкцию ниже)
-#      CM_KEYSTORE_PASSWORD — пароль к keystore
-#      CM_KEY_ALIAS         — alias ключа
-#      CM_KEY_PASSWORD      — пароль к ключу
-#    iOS:
-#      настраивается через Code Signing Identities в UI Codemagic
-#      (загрузить .p12 сертификат и .mobileprovision)
+#  Секреты: НЕ НУЖНЫ
+#
+#  Ограничения:
+#    Android APK — устанавливается на устройство, в Google Play нельзя
+#    iOS IPA     — устанавливается через AltStore или Sideloadly
 # ══════════════════════════════════════════════════════════════
 
 workflows:
 
   # ────────────────────────────────────────────────────────────
-  #  Android: подписанный APK + AAB
+  #  Android: APK с debug-ключом
+  #  Секреты не нужны — Gradle использует встроенный debug keystore
   # ────────────────────────────────────────────────────────────
-  android-release:
-    name: Android Release
-    max_build_duration: 60
+  android-test:
+    name: Android Test Build
+    max_build_duration: 30
 
     environment:
       flutter: 3.41.2
       java: 17
-      # Переменные для подписания (задать в Codemagic UI → Environment variables)
       vars:
         PACKAGE_NAME: ru.matveyb9.diy.thermometer
 
@@ -39,85 +35,59 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: main
+        - pattern: develop
           include: true
 
     scripts:
-      # 1. Восстанавливаем keystore из base64-секрета
-      - name: Создать key.properties
-        script: |
-          echo $CM_KEYSTORE | base64 --decode > $CM_BUILD_DIR/thermometer/android/app/keystore.p12
-          cat >> $CM_BUILD_DIR/thermometer/android/key.properties << EOF
-          storePassword=$CM_KEYSTORE_PASSWORD
-          keyPassword=$CM_KEY_PASSWORD
-          keyAlias=$CM_KEY_ALIAS
-          storeFile=keystore.p12
-          EOF
-
-      # 2. Получаем зависимости
+      # 1. Зависимости
       - name: Flutter pub get
         script: |
           cd thermometer
           flutter pub get
 
-      # 3. Анализ кода
+      # 2. Анализ кода
       - name: Flutter analyze
         script: |
           cd thermometer
           flutter analyze --no-fatal-infos
 
-      # 4. Сборка APK (для прямой установки)
-      - name: Build APK
+      # 3. Сборка APK
+      #    key.properties отсутствует → build.gradle.kts автоматически
+      #    использует debug signingConfig (fallback прописан в gradle)
+      - name: Build APK (test)
         script: |
           cd thermometer
           flutter build apk \
             --release \
-            --build-name=1.0.0 \
-            --build-number=$BUILD_NUMBER
-
-      # 5. Сборка AAB (для Google Play)
-      - name: Build AAB
-        script: |
-          cd thermometer
-          flutter build appbundle \
-            --release \
-            --build-name=1.0.0 \
+            --build-name=0.0.$BUILD_NUMBER \
             --build-number=$BUILD_NUMBER
 
     artifacts:
-      # APK — прямая установка на устройство
       - thermometer/build/app/outputs/flutter-apk/app-release.apk
-      # AAB — для загрузки в Google Play
-      - thermometer/build/app/outputs/bundle/release/app-release.aab
-      # Логи сборки
-      - flutter_drive.log
 
     publishing:
       email:
         recipients:
-          - your@email.com   # ← замени на свой email
+          - bmb20109@yandex.ru   # <- замени на свой email
         notify:
           success: true
           failure: true
 
 
   # ────────────────────────────────────────────────────────────
-  #  iOS: подписанный IPA
+  #  iOS: неподписанный IPA
+  #  Устанавливается через AltStore / Sideloadly (не App Store)
   # ────────────────────────────────────────────────────────────
-  ios-release:
-    name: iOS Release
-    max_build_duration: 60
+  ios-test:
+    name: iOS Test Build
+    max_build_duration: 40
 
     environment:
       flutter: 3.41.2
       java: 17
       xcode: latest
       cocoapods: default
-      ios_signing:
-        distribution_type: ad_hoc    # ad_hoc = установка на конкретные устройства
-                                      # app_store = для App Store Connect
-        bundle_identifier: ru.matveyb9.diy.thermometer
-
+      # ios_signing отсутствует намеренно — сборка без подписи
       vars:
         BUNDLE_ID: ru.matveyb9.diy.thermometer
 
@@ -125,17 +95,17 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: main
+        - pattern: develop
           include: true
 
     scripts:
-      # 1. Получаем зависимости Flutter
+      # 1. Зависимости Flutter
       - name: Flutter pub get
         script: |
           cd thermometer
           flutter pub get
 
-      # 2. Устанавливаем CocoaPods-зависимости
+      # 2. CocoaPods
       - name: Pod install
         script: |
           cd thermometer/ios
@@ -147,26 +117,33 @@ workflows:
           cd thermometer
           flutter analyze --no-fatal-infos
 
-      # 4. Сборка IPA
-      - name: Build IPA
+      # 4. Сборка неподписанного IPA
+      #    --no-codesign: пропускает подписание (Apple аккаунт не нужен)
+      - name: Build IPA (unsigned)
         script: |
           cd thermometer
-          flutter build ipa \
+          flutter build ios \
             --release \
-            --export-options-plist=/Users/builder/export_options.plist \
-            --build-name=1.0.0 \
+            --no-codesign \
+            --build-name=0.0.$BUILD_NUMBER \
             --build-number=$BUILD_NUMBER
 
+          # flutter build ios --no-codesign не создаёт .ipa автоматически
+          # упаковываем .app в .ipa вручную
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/Release-iphoneos/Runner.app \
+                build/ios/ipa/Payload/Runner.app
+          cd build/ios/ipa
+          zip -r thermometer-unsigned.ipa Payload/
+
     artifacts:
-      # IPA — установка через AltStore / TestFlight / Codemagic
-      - thermometer/build/ios/ipa/*.ipa
-      # Логи Xcode (полезны при ошибках)
+      - thermometer/build/ios/ipa/thermometer-unsigned.ipa
       - /tmp/xcodebuild_logs/*.log
 
     publishing:
       email:
         recipients:
-          - your@email.com   # ← замени на свой email
+          - bmb20109@yandex.ru   # <- замени на свой email
         notify:
           success: true
           failure: true
